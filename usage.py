@@ -58,8 +58,8 @@ class Usage():
         values = [values.total, values.available]
         line = ''
         for value in values:
-            line +=self.bytes2human(value) + ','
-        line += '%.2f' % float((1-values[1]/values[0])*100)
+            line += self.bytes2human(value) + ','
+        line += '%.2f' % float((1 - values[1] / values[0]) * 100)
         return line
 
     def mem_swap_header(self):
@@ -74,9 +74,10 @@ class Usage():
         values = [values[0], values[2], values[3]]
         line = ''
         for value in values[0:-1]:
-            line +=self.bytes2human(value) + ','
+            line += self.bytes2human(value) + ','
         line += '%.2f' % values[-1]
         return line
+
 
 if __name__ == '__main__':
     values = psutil.swap_memory()

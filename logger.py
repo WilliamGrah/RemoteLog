@@ -6,9 +6,9 @@ import time
 
 
 class Logger():
-    def __init__(self, path, filename='log', delay=1):
-        self.delay = delay;
-        self.path= os.path.abspath(path)
+    def __init__(self, path, filename='log', delay=0):
+        self.delay = delay
+        self.path = os.path.abspath(path)
         self.logfile = None
         self.header = None
         self.csv = None
@@ -21,7 +21,7 @@ class Logger():
             print('Log in: ', self.logfile)
             if os.path.exists(self.logfile):
                 print('File already exist..')
-                name = filename +'_{:05d}'.format(count)
+                name = filename + '_{:05d}'.format(count)
                 count += 1
             else:
                 notGood = False
@@ -50,23 +50,27 @@ class Logger():
         while True:
             try:
                 delay = self.delay - (time.time() - start_time)
-                print('Delay for: {:.2f}s'.format(delay))
-                time.sleep(delay)
+                if delay > 0:
+                    print('Delay for: {:.2f}s'.format(delay))
+                    time.sleep(delay)
             except Exception as e:
                 print(e)
 
             start_time = time.time()
             self.append_csv(self.csv)
 
+
 if __name__ == '__main__':
     gpu = GPU()
     usage = Usage(3)
 
-    headers = [usage.cpu_header, usage.disk_header, usage.mem_ram_header, usage.mem_swap_header, gpu.header]
-    values = [usage.cpu_csv, usage.disk_csv, usage.mem_ram_csv, usage.mem_swap_csv, gpu.csv]
+    headers = [usage.cpu_header, usage.disk_header,
+               usage.mem_ram_header, usage.mem_swap_header, gpu.header]
+    values = [usage.cpu_csv, usage.disk_csv,
+              usage.mem_ram_csv, usage.mem_swap_csv, gpu.csv]
 
     path = os.path.dirname(os.path.realpath(__file__))
     logger = Logger(path, delay=5)
     logger.set_header(headers)
     logger.set_csv(values)
-    logger.run();
+    logger.run()
